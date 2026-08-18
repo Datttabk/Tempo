@@ -1,0 +1,28 @@
+version: '3.8'
+
+services:
+  backend:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    ports:
+      - "8000:8000"
+    environment:
+      - DATABASE_URL=sqlite:////app/tempo.db
+      - DEFAULT_PRICE_INR=499
+      - DEFAULT_CURRENCY=INR
+      - PAYMENT_GATEWAY=MOCK
+      - SUPABASE_PAT=sbp_68669aa36c0da3bf9ebebceb0079ac454107f234
+    volumes:
+      - ./storage:/app/storage
+    restart: always
+
+  frontend:
+    build:
+      context: ./frontend
+      dockerfile: Dockerfile
+    ports:
+      - "3000:80"
+    depends_on:
+      - backend
+    restart: always
